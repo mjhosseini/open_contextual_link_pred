@@ -282,7 +282,7 @@ class News_Iterable_Dataset(IterableDataset):
                 if _ADD_TOKENS:
                     tokens = line_json["bert_tokens"]
 
-                # if line_number  >= 180: #
+                # if line_number >= 180:
                 #     break
 
                 if line_number % 10 == 1:
@@ -1081,8 +1081,8 @@ class PreBuiltEntGraphCollection:
                 print("num prebuild_entgraph files: ", num_f)
             thisGpath = prebuilt_entgraph_dir + f
 
-            if num_f == 10:
-                break
+            # if num_f == 10:
+            #     break
 
             if prebuilt_simSuffix not in f or os.stat(thisGpath).st_size == 0:
                 continue

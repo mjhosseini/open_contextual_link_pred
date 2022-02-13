@@ -1004,29 +1004,29 @@ def main():
 
         if args.combine_entgraph_emb:
             if args.do_eval:
-                eval_file = open("eval_final_all_" + args.model_name_or_path.split("/")[1] + "_" +
-                                 args.prebuilt_entgraph_dir.split("/")[-1] + str(args.prebuilt_featIdx) + (
+                eval_file = open("eval_final_" + args.model_name_or_path.split("/")[1] + "_" +
+                                 args.prebuilt_entgraph_dir.split("/")[-1] + "_feature_index_" + str(args.prebuilt_featIdx) + (
                                      "_" + args.do_eval_ext if args.do_eval_ext else "") + ".txt", "w")
             else:
-                eval_file = open("test_final_all_" + args.model_name_or_path.split("/")[1] + "_" +
-                                 args.prebuilt_entgraph_dir.split("/")[-1] + str(args.prebuilt_featIdx) + (
+                eval_file = open("test_final_" + args.model_name_or_path.split("/")[1] + "_" +
+                                 args.prebuilt_entgraph_dir.split("/")[-1] + "_feature_index_" + str(args.prebuilt_featIdx) + (
                                      "_" + args.do_eval_ext if args.do_eval_ext else "") + ".txt", "w")
 
         elif loadModel:
             if args.do_eval:
-                eval_file = open("eval_final_all_" + args.model_name_or_path.split("/")[1] + (
+                eval_file = open("eval_final_" + args.model_name_or_path.split("/")[1] + (
                     "_" + args.do_eval_ext if args.do_eval_ext else "") + ".txt", "w")
             else:
-                eval_file = open("test_final_all_" + args.model_name_or_path.split("/")[1] + (
+                eval_file = open("test_final_" + args.model_name_or_path.split("/")[1] + (
                     "_" + args.do_eval_ext if args.do_eval_ext else "") + ".txt", "w")
         else:
             if args.do_eval:
                 eval_file = open(
-                    "eval_final_all_" + args.prebuilt_entgraph_dir.split("/")[-1] + str(args.prebuilt_featIdx) + (
+                    "eval_final_" + args.prebuilt_entgraph_dir.split("/")[-1] + "_feature_index_" + str(args.prebuilt_featIdx) + (
                         "_" + args.do_eval_ext if args.do_eval_ext else "") + ".txt", "w")
             else:
                 eval_file = open(
-                    "test_final_all_" + args.prebuilt_entgraph_dir.split("/")[-1] + str(args.prebuilt_featIdx) + (
+                    "test_final_" + args.prebuilt_entgraph_dir.split("/")[-1] + "_feature_index_" + str(args.prebuilt_featIdx) + (
                         "_" + args.do_eval_ext if args.do_eval_ext else "") + ".txt", "w")
 
         iter_eval_dataloader = iter(eval_dataloader)

@@ -24,10 +24,12 @@ Download the extracted binary relations from the NewsSpike corpus into convE/dat
 
 #### Training
 
-Training the CNCE (Contextualized and Non-Contextualized Embeddings) model for the contextual link prediction task:
+Training the CNCE (Contextualized and Non-Contextualized Embeddings) model on the NewsSpike corpus for the contextual link prediction task:
 
-     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path bert-base-uncased --do_train --do_lower_case --input_path ../contextual_data/news_bert_input.json --trels_folder ../contextual_data/typed_rels --all_triples_path ../contextual_data/NS_epair_split/ --learning_rate 5e-4 --ctx_lr_ratio 1e-2 --num_train_epochs 10 --max_seq_length 40 --output_dir models_bert/contextual_5e-4_1e-2_bsz_64_epair_split --per_gpu_batch_size=64 --num_examples 8500000 --gradient_accumulation_steps 2 --overwrite_output --cache_dir . --logging_steps 20 --preferred_num_labels 0 --evaluate_during_training
+     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path bert-base-uncased --do_train --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --learning_rate 5e-4 --ctx_lr_ratio 1e-2 --num_train_epochs 10 --max_seq_length 40 --output_dir pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split --per_gpu_batch_size=64 --num_examples 8500000 --gradient_accumulation_steps 2 --overwrite_output --cache_dir . --logging_steps 20 --preferred_num_labels 0 --evaluate_during_training
     
+In the above training, we make sure that the entity-pairs in the triple mentions in training, develpment, and test sets do not overlap. Therefore, the model cannot just memorize the relations that hold between entity pairs. The flag --all_triples_path provides a split of the data based on entity-pairs.
+
 Alternatively, you can copy the pre-trained contextual link prediction model (TODO).
 
     sh scripts/dl_pretrained.sh
@@ -36,63 +38,68 @@ Alternatively, you can copy the pre-trained contextual link prediction model (TO
 
 Evaluating the CNCE model on the contextual link prediction task:
 
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000  --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
 
+The results will be written in a file, e.g., test_final_CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split.txt.
 
-### Computing triple (link) probabilities for seen and unseen triples
+**See the meaning of all the flags in modeling/run_contextual_link_pred.py**
 
-**Only on training triples:**
+### Using contextual link prediction to improve entailment graph learning
 
-    CUDA_VISIBLE_DEVICES=0 python3 convE/main.py model ConvE input_drop 0.2 hidden_drop 0.3 feat_drop 0.2 lr 0.003 lr_decay 0.995 dataset NS_probs_train process True mode probs probs_file_path NS_probs_train.txt
+#### Training
 
-**On all triples:**
+Training the CNCE model. Since the entailment graphs will be evaluated on a different dataset (e.g., Levy/Holt's dataset), we do not need the constraints on the entity pairs seen during training vs the ones during testing. We perform the training again without the --all_triples_path flag. In this case, the code splits the triple mentions randomly into training, development and test sets (with overlap between the entities). We observed that random split will yield slightly better results on entailment datasets because the training sees more diverse examples (almost all entity pairs occur in training).    
 
-    CUDA_VISIBLE_DEVICES=0 python3 convE/main.py model ConvE input_drop 0.2 hidden_drop 0.3 feat_drop 0.2 lr 0.003 lr_decay 0.995 dataset NS_probs_all process True mode probs probs_file_path NS_probs_all.txt
+     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path bert-base-uncased --do_train --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --learning_rate 5e-4 --ctx_lr_ratio 1e-2 --num_train_epochs 10 --max_seq_length 40 --output_dir pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split --per_gpu_batch_size=64 --num_examples 8500000 --gradient_accumulation_steps 2 --overwrite_output --cache_dir . --logging_steps 20 --preferred_num_labels 0 --evaluate_during_training
+    
+Alternatively, you can copy the pre-trained contextual link prediction model (TODO).
 
-### Building the entailment graphs
+    sh scripts/dl_pretrained.sh
 
-Build the entailment graphs by the Marcov Chain model (random walk) as well as the Marcov Chain model (random walk) + augmentation with new scores. The former is done by --max_new_args 0 and the latter is done by --max_new_args 50. 
+#### Building entailment graphs
 
-This step should be run on CPU, preferably with more than 100GB RAM (depending on the --max_new_args parameter).
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --max_seq_length 40 --entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_random_split
 
-**Only for training triples:**
+The entailment graphs will be written in a directory, e.g., entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5.
 
-    python randWalk/randWalkMatFactory.py --probs_file_path NS_probs_train.txt --triples_path convE/data/NS/train.txt --max_new_args 0 --entgraph_path typedEntGrDir_NS_train_MC
-    python randWalk/randWalkMatFactory.py --probs_file_path NS_probs_train.txt --triples_path convE/data/NS/train.txt --max_new_args 50 --entgraph_path typedEntGrDir_NS_train_AUG_MC
+See https://github.com/mjhosseini/entgraph_eval for the steps to evaluate the entailment graphs on the Levy/Holt's dataset.
 
-**On all triples:**
+### Using Entailment Graphs to Improve the Contextual link prediction task.
 
-    python randWalk/randWalkMatFactory.py --probs_file_path NS_probs_all.txt --triples_path convE/data/NS/all.txt --max_new_args 0 --entgraph_path typedEntGrDir_NS_all_MC
-    python randWalk/randWalkMatFactory.py --probs_file_path NS_probs_all.txt --triples_path convE/data/NS/all.txt --max_new_args 50 --entgraph_path typedEntGrDir_NS_all_AUG_MC
+#### Building entailment graphs
 
-## Evaluation
+We build the entailment graphs again.
 
-### Evaluate the entailment graphs
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --use_only_training_data_to_build_entgraphs --max_seq_length 40 --entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train
 
-Please refer to https://github.com/mjhosseini/entgraph_eval for evaluation.
+The above code has two differences with the previous entailment graph:
 
-We can use the entailment graphs that are learned by accessing all the link prediction data as here we only evaluate the entailment task, not link prediction task. Use the learned entailment graphs (typedEntGrDir_NS_all_MC or typedEntGrDir_NS_all_AUG_MC) as the gpath parameter of the entgraph_eval project.
+A. using entity-pairs splits as we are going to use the entailment graphs for the contextual link prediction task (so we cannot use the entailment graphs from the random triple mentions split).
 
-### Improve link prediction with entailment graphs
+B. We only use the training portion of the triple mentions by using the flag --use_only_training_data_to_build_entgraphs.
 
-We can use the entailment graphs that are learned by accessing only the link prediciton training data.
+#### Evaluating entailment graphs on the contextual link prediction task
 
-Using entailment graphs with the Marcov Chain model (random walk):
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000 --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels/ --all_triples_path data/NS_epair_split/ --prebuilt_entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
 
-    CUDA_VISIBLE_DEVICES=0 python3 convE/main.py model ConvE input_drop 0.2 hidden_drop 0.3 feat_drop 0.2 lr 0.003 lr_decay 0.995 dataset NS process True mode test_entgraphs entgraph_path typedEntGrDir_NS_train_MC 1>lpred_detailed_output_MC.txt 2>&1 &
+#### Evaluating the combination of entailment graphs and the CNCE model on the contextual link prediction task
+    
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000  --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels/ --all_triples_path data/NS_epair_split/ --do_eval_ext comb_beta_.9 --beta_comb .9 --prebuilt_entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train --combine_entgraph_emb --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
 
-Using entailment graphs with the Marcov Chain model (random walk) + augmentation with new scores:
-
-    CUDA_VISIBLE_DEVICES=0 python3 convE/main.py model ConvE input_drop 0.2 hidden_drop 0.3 feat_drop 0.2 lr 0.003 lr_decay 0.995 dataset NS process True mode test_entgraphs entgraph_path typedEntGrDir_NS_all_MC 1>lpred_detailed_output_MC.txt 2>&1 &
 
 ## Citation
 
 If you found this codebase useful, please cite:
 
-    @inproceedings{hosseini2019duality,
-      title={Duality of Link Prediction and Entailment Graph Induction},
-      author={Hosseini, Mohammad Javad and Cohen, Shay B and Johnson, Mark and Steedman, Mark},
-      booktitle={Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
-      pages={4736--4746},
-      year={2019}
+    @inproceedings{hosseini-etal-2021-open-domain,
+    title = "Open-Domain Contextual Link Prediction and its Complementarity with Entailment Graphs",
+    author = "Hosseini, Mohammad Javad  and
+      Cohen, Shay B.  and
+      Johnson, Mark  and
+      Steedman, Mark",
+    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2021",
+    year = "2021",
+    pages = "2790--2802",
     }
+
 
