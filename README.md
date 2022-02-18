@@ -30,11 +30,13 @@ Training the CNCE (Contextualized and Non-Contextualized Embeddings) model on th
     
 In the above training, we make sure that the entity-pairs in the triple mentions in training, develpment, and test sets do not overlap. Therefore, the model cannot just memorize the relations that hold between entity pairs. The flag --all_triples_path provides a split of the data based on entity-pairs.
 
-You can also download the pre-trained contextual link prediction model. All the mentioned models in this GitHub page could be found in the folder 'pretrained_models'.
+***See the meaning of all the flags in modeling/run_contextual_link_pred.py***
+
+You can also download the pre-trained contextual link prediction model and use the following model: CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split.
 
     sh scripts/dl_pretrained.sh
 
-***See the meaning of all the flags in modeling/run_contextual_link_pred.py***
+All the mentioned models in this GitHub page could be found in the folder 'pretrained_models'.
 #### Evaluation
 
 Evaluating the CNCE model on the contextual link prediction task:
@@ -47,11 +49,11 @@ The results will be written in the following file: test_final_CNCE_lr_5e-4_ctx_l
 
 #### Training
 
-Training the CNCE model. Since the entailment graphs will be evaluated on a different dataset (e.g., Levy/Holt's dataset), we do not need the constraints on the entity pairs seen during training vs the ones during testing. We perform the training again without the --all_triples_path flag. In this case, the code splits the triple mentions randomly into training, development and test sets (with overlap between the entities). We observed that random split will yield slightly better results on entailment datasets because the training sees more diverse examples (almost all entity pairs occur in training).    
+Since the entailment graphs will be evaluated on a different dataset (e.g., Levy/Holt's dataset), we do not need the constraints on the entity pairs seen during training vs the ones during testing. We perform the training again without the --all_triples_path flag. In this case, the code splits the triple mentions randomly into training, development and test sets (with overlap between the entities). We observed that random split will yield slightly better results on entailment datasets because the training sees more diverse examples (almost all entity pairs occur in training).    
 
      python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path bert-base-uncased --do_train --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --learning_rate 5e-4 --ctx_lr_ratio 1e-2 --num_train_epochs 10 --max_seq_length 40 --output_dir models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split --per_gpu_batch_size=64 --num_examples 8500000 --gradient_accumulation_steps 2 --overwrite_output --cache_dir . --logging_steps 20 --preferred_num_labels 0 --evaluate_during_training
     
-Alternatively, you can copy the pre-trained contextual link prediction model (TODO).
+You can also use the following model from the pre-trained folder: CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split
 
     sh scripts/dl_pretrained.sh
 
