@@ -30,7 +30,7 @@ Training the CNCE (Contextualized and Non-Contextualized Embeddings) model on th
     
 In the above training, we make sure that the entity-pairs in the triple mentions in training, develpment, and test sets do not overlap. Therefore, the model cannot just memorize the relations that hold between entity pairs. The flag --all_triples_path provides a split of the data based on entity-pairs.
 
-You can also download the pre-trained contextual link prediction model.
+You can also download the pre-trained contextual link prediction model. All the mentioned models in this GitHub page could be found in the folder 'pretrained_models'.
 
     sh scripts/dl_pretrained.sh
 
