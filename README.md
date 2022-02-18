@@ -1,6 +1,6 @@
 UNDER DEVELOPMENT
 
-This codbase contains the implementation of the following paper:
+This codebase contains the implementation of the following paper:
 
 **Open-Domain Contextual Link Prediction and its Complementarity with Entailment Graphs**, *Mohammad Javad Hosseini, Shay B. Cohen, Mark Johnson, and Mark Steedman. Findings of the Association for Computational Linguistics: EMNLP 2021.* [[paper]](https://aclanthology.org/2021.findings-emnlp.238.pdf)
 
@@ -26,11 +26,11 @@ Download the extracted binary relations from the NewsSpike corpus into convE/dat
 
 Training the CNCE (Contextualized and Non-Contextualized Embeddings) model on the NewsSpike corpus for the contextual link prediction task:
 
-     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path bert-base-uncased --do_train --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --learning_rate 5e-4 --ctx_lr_ratio 1e-2 --num_train_epochs 10 --max_seq_length 40 --output_dir pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split --per_gpu_batch_size=64 --num_examples 8500000 --gradient_accumulation_steps 2 --overwrite_output --cache_dir . --logging_steps 20 --preferred_num_labels 0 --evaluate_during_training
+     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path bert-base-uncased --do_train --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --learning_rate 5e-4 --ctx_lr_ratio 1e-2 --num_train_epochs 10 --max_seq_length 40 --output_dir models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split --per_gpu_batch_size=64 --num_examples 8500000 --gradient_accumulation_steps 2 --overwrite_output --cache_dir . --logging_steps 20 --preferred_num_labels 0 --evaluate_during_training
     
 In the above training, we make sure that the entity-pairs in the triple mentions in training, develpment, and test sets do not overlap. Therefore, the model cannot just memorize the relations that hold between entity pairs. The flag --all_triples_path provides a split of the data based on entity-pairs.
 
-Alternatively, you can copy the pre-trained contextual link prediction model (TODO).
+You can also download the pre-trained contextual link prediction model.
 
     sh scripts/dl_pretrained.sh
 
@@ -38,7 +38,7 @@ Alternatively, you can copy the pre-trained contextual link prediction model (TO
 
 Evaluating the CNCE model on the contextual link prediction task:
 
-    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000  --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000  --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
 
 The results will be written in a file, e.g., test_final_CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split.txt.
 
@@ -50,7 +50,7 @@ The results will be written in a file, e.g., test_final_CNCE_lr_5e-4_ctx_lr_rati
 
 Training the CNCE model. Since the entailment graphs will be evaluated on a different dataset (e.g., Levy/Holt's dataset), we do not need the constraints on the entity pairs seen during training vs the ones during testing. We perform the training again without the --all_triples_path flag. In this case, the code splits the triple mentions randomly into training, development and test sets (with overlap between the entities). We observed that random split will yield slightly better results on entailment datasets because the training sees more diverse examples (almost all entity pairs occur in training).    
 
-     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path bert-base-uncased --do_train --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --learning_rate 5e-4 --ctx_lr_ratio 1e-2 --num_train_epochs 10 --max_seq_length 40 --output_dir pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split --per_gpu_batch_size=64 --num_examples 8500000 --gradient_accumulation_steps 2 --overwrite_output --cache_dir . --logging_steps 20 --preferred_num_labels 0 --evaluate_during_training
+     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path bert-base-uncased --do_train --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --learning_rate 5e-4 --ctx_lr_ratio 1e-2 --num_train_epochs 10 --max_seq_length 40 --output_dir models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split --per_gpu_batch_size=64 --num_examples 8500000 --gradient_accumulation_steps 2 --overwrite_output --cache_dir . --logging_steps 20 --preferred_num_labels 0 --evaluate_during_training
     
 Alternatively, you can copy the pre-trained contextual link prediction model (TODO).
 
@@ -58,7 +58,7 @@ Alternatively, you can copy the pre-trained contextual link prediction model (TO
 
 #### Building entailment graphs
 
-    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --max_seq_length 40 --entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_random_split
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --max_seq_length 40 --entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_random_split
 
 The entailment graphs will be written in a directory, e.g., entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5.
 
@@ -70,7 +70,7 @@ See https://github.com/mjhosseini/entgraph_eval for the steps to evaluate the en
 
 We build the entailment graphs again.
 
-    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --use_only_training_data_to_build_entgraphs --max_seq_length 40 --entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --use_only_training_data_to_build_entgraphs --max_seq_length 40 --entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train
 
 The above code has two differences with the previous entailment graph:
 
@@ -80,11 +80,11 @@ B. We only use the training portion of the triple mentions by using the flag --u
 
 #### Evaluating entailment graphs on the contextual link prediction task
 
-    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000 --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels/ --all_triples_path data/NS_epair_split/ --prebuilt_entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000 --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels/ --all_triples_path data/NS_epair_split/ --prebuilt_entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
 
 #### Evaluating the combination of entailment graphs and the CNCE model on the contextual link prediction task
     
-    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000  --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels/ --all_triples_path data/NS_epair_split/ --do_eval_ext comb_beta_.9 --beta_comb .9 --prebuilt_entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train --combine_entgraph_emb --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000  --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels/ --all_triples_path data/NS_epair_split/ --do_eval_ext comb_beta_.9 --beta_comb .9 --prebuilt_entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train --combine_entgraph_emb --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
 
 
 ## Citation
