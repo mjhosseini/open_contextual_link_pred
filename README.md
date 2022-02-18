@@ -34,7 +34,7 @@ You can also download the pre-trained contextual link prediction model. All the 
 
     sh scripts/dl_pretrained.sh
 
-**See the meaning of all the flags in modeling/run_contextual_link_pred.py**
+***See the meaning of all the flags in modeling/run_contextual_link_pred.py***
 #### Evaluation
 
 Evaluating the CNCE model on the contextual link prediction task:
