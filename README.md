@@ -34,15 +34,14 @@ You can also download the pre-trained contextual link prediction model. All the 
 
     sh scripts/dl_pretrained.sh
 
+**See the meaning of all the flags in modeling/run_contextual_link_pred.py**
 #### Evaluation
 
 Evaluating the CNCE model on the contextual link prediction task:
 
     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000  --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
 
-The results will be written in a file, e.g., test_final_CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split.txt.
-
-**See the meaning of all the flags in modeling/run_contextual_link_pred.py**
+The results will be written in the following file: test_final_CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split.txt
 
 ### Using contextual link prediction to improve entailment graph learning
 
