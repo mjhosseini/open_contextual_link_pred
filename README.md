@@ -14,7 +14,7 @@ This codebase contains the implementation of the following paper:
 
 ### Preparing the data
 
-Download the extracted binary relations from the NewsSpike corpus into convE/data folder:
+Download the extracted triple mentions and other necessary data into the folder "data/":
     
     sh scripts/data.sh
 
