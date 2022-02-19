@@ -32,7 +32,7 @@ In the above training, we make sure that the entity-pairs in the triple mentions
 
 ***See the meaning of all the flags in modeling/run_contextual_link_pred.py***
 
-You can also download the pre-trained contextual link prediction model and use the following model: CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split.
+You can also download the pre-trained contextual link prediction models and use the following model from the pre-trained folder: pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split
 
     sh scripts/dl_pretrained.sh
 
