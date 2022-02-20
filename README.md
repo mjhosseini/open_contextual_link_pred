@@ -1,7 +1,7 @@
 UNDER DEVELOPMENT
 
 <div class=figure>
-  <p align="center"><img src="https://www.dropbox.com/s/nnv5733g3ukp0e3/toy_emnlp_findings2021.png?raw=1"
+  <p align="center"><img src="https://www.dropbox.com/s/tjkt2c7774wekgu/toy_emnlp_findings2021.png?raw=1"
     width="450" height=auto></p>
   <p align="center"><small><i>Figure 1. Learning entailments that are consistent (A) across different but related typed entailment graphs and (B) within each graph. The dotted edges are missing, but will be recovered by considering relationships shown by across-graph (red) and within-graph (light blue) connections.</i></small></p>
 </div>
