@@ -68,7 +68,7 @@ You can also use the following model from the pre-trained folder: "pretrained_mo
 
 **CNCE MC**:
 
-    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --max_seq_length 40 --entgraph_dir --num_fill 0 --per_gpu_batch_size=64 entgraphs_CNCE_MC_random_split
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --max_seq_length 40 --num_fill 0 --per_gpu_batch_size=64 --entgraph_dir  entgraphs_CNCE_MC_random_split
     
 The entailment graphs will be written in "entgraphs_CNCE_MC_random_split".
     
