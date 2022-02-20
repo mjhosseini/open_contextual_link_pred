@@ -78,7 +78,7 @@ See https://github.com/mjhosseini/entgraph_eval for the steps to evaluate the en
 
 We build the entailment graphs again.
 
-    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --use_only_training_data_to_build_entgraphs --max_seq_length 40 --entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train
+    python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --all_triples_path data/NS_epair_split/ --use_only_training_data_to_build_entgraphs --max_seq_length 40 --num_fill 100 --per_gpu_batch_size=512 --alpha=.5 --entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train
 
 The above command has two differences with the previous command to build entailment graphs:
 
