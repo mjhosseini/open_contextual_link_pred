@@ -78,7 +78,7 @@ The entailment graphs will be written in "entgraphs_CNCE_MC_random_split".
 
 The entailment graphs will be written in "entgraphs_AUG_CNCE_MC_random_split".
 
-### Learning global entailment graphs
+### Learning global entailment graphs (for Levy/Holt's dataset)
 Please refer to https://github.com/mjhosseini/entGraph/ (step 6) for learning global entailment graphs from local entailment graphs (the ones that were learned above).
 
 *We set the below parameters for the "CNCE MC" and "CNCE AUG MC" models:*
