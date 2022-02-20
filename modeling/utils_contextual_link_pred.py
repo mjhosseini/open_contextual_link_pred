@@ -227,7 +227,7 @@ class News_Iterable_Dataset(IterableDataset):
 
         return ret
 
-    def get_token_ids(self, type):# TODO (replace _ with space)
+    def get_token_ids(self, type):
         if type not in self.token2ids:
             self.token2ids[type] = self.tokenize(type)[1]
         return self.token2ids[type]
@@ -282,7 +282,7 @@ class News_Iterable_Dataset(IterableDataset):
                 if _ADD_TOKENS:
                     tokens = line_json["bert_tokens"]
 
-                # if line_number >= 180:
+                # if line_number >= 180: # Used for debugging.
                 #     break
 
                 if line_number % 10 == 1:

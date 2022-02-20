@@ -25,7 +25,7 @@ class BertForEntGraphs(BertPreTrainedModel):
         self.init_weights()
 
         self.sigmoid = nn.Sigmoid()
-        self.loss = torch.nn.BCELoss(reduction = 'none') # TODO (remove reduction)
+        self.loss = torch.nn.BCELoss(reduction='none')
 
     def init_emb_weights(self, weights):
         self.pred_embs.weight.data.copy_(torch.from_numpy(weights))

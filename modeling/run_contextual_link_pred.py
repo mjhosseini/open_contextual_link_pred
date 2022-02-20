@@ -798,16 +798,16 @@ def main():
     if args.local_rank == -1 or args.no_cuda:
         if not args.device_name:
             device = torch.device(
-                "cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")  # TODO (fix this)
+                "cuda" if torch.cuda.is_available() and not args.no_cuda else "cpu")
         else:
             device = torch.device(
-                args.device_name if torch.cuda.is_available() and not args.no_cuda else "cpu")  # TODO (fix this)
-        if args.evaluate_during_training:  # TODO (change this, only n_gpu=1 for evaluation)
+                args.device_name if torch.cuda.is_available() and not args.no_cuda else "cpu")
+        if args.evaluate_during_training:
             print("setting n_gpu to 1")
             args.n_gpu = 1
         else:
             args.n_gpu = 0 if args.no_cuda else torch.cuda.device_count()
-            if args.evaluate_during_training:  # TODO (remove this)
+            if args.evaluate_during_training:
                 args.n_gpu = 1
     else:  # Initializes the distributed backend which will take care of sychronizing nodes/GPUs
         torch.cuda.set_device(args.local_rank)
@@ -873,11 +873,6 @@ def main():
         )
         print("model loaded")
         #
-
-        # TODO: remove below
-        # model = model_class(config)
-        # model.eval()
-        # model.test_pretrained()
 
         if args.freeze11:
             unfrozen_layers = ["pooler", "cls", "pred_embs", "encoder.layer.11"]
