@@ -1,5 +1,11 @@
 UNDER DEVELOPMENT
 
+<div class=figure>
+  <p align="center"><img src="https://www.dropbox.com/s/nnv5733g3ukp0e3/toy_emnlp_findings2021.png?raw=1"
+    width="450" height=auto></p>
+  <p align="center"><small><i>Figure 1. Learning entailments that are consistent (A) across different but related typed entailment graphs and (B) within each graph. The dotted edges are missing, but will be recovered by considering relationships shown by across-graph (red) and within-graph (light blue) connections.</i></small></p>
+</div>
+
 This codebase contains the implementation of the following paper:
 
 **Open-Domain Contextual Link Prediction and its Complementarity with Entailment Graphs**, *Mohammad Javad Hosseini, Shay B. Cohen, Mark Johnson, and Mark Steedman. Findings of the Association for Computational Linguistics: EMNLP 2021.* [[paper]](https://aclanthology.org/2021.findings-emnlp.238.pdf)
