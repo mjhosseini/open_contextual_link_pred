@@ -53,9 +53,7 @@ Since the entailment graphs will be evaluated on a different dataset (e.g., Levy
 
      python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path bert-base-uncased --do_train --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --learning_rate 5e-4 --ctx_lr_ratio 1e-2 --num_train_epochs 10 --max_seq_length 40 --output_dir models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split --per_gpu_batch_size=64 --num_examples 8500000 --gradient_accumulation_steps 2 --overwrite_output --cache_dir . --logging_steps 20 --preferred_num_labels 0 --evaluate_during_training
     
-You can also use the following model from the pre-trained folder: CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split
-
-    sh scripts/dl_pretrained.sh
+You can also use the following model from the pre-trained folder: pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split
 
 #### Building entailment graphs
 
