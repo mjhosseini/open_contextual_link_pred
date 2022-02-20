@@ -32,11 +32,14 @@ In the above training, we make sure that the entity-pairs in the triple mentions
 
 ***See the meaning of all the flags in modeling/run_contextual_link_pred.py***
 
-You can also download the pre-trained contextual link prediction models and use the following model from the pre-trained folder: pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split
+### Existing pre-trained models
+
+Instead of training, you can download the pre-trained contextual link prediction models.
 
     sh scripts/dl_pretrained.sh
 
-All the mentioned models in this GitHub page could be found in the folder 'pretrained_models'.
+All the mentioned models in this GitHub page could be found in the folder 'pretrained_models'. The above model can be found in "pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split".
+
 ### Evaluation
 
 Evaluating the CNCE model on the contextual link prediction task:
