@@ -32,7 +32,7 @@ In the above training, we make sure that the entity-pairs in the triple mentions
 
 ***See the meaning of all the flags in modeling/run_contextual_link_pred.py***
 
-### Existing pre-trained models
+### Existing pre-trained models (optional)
 
 Instead of training, you can download the pre-trained contextual link prediction models.
 
