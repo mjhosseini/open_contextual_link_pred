@@ -1,5 +1,3 @@
-UNDER DEVELOPMENT
-
 <div class=figure>
   <p align="center"><img src="https://www.dropbox.com/s/ovxcb46pvk5bup2/toy_emnlp_findings2021.png?raw=1"
     width="450" height=auto></p>
