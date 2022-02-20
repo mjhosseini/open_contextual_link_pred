@@ -3,7 +3,7 @@ UNDER DEVELOPMENT
 <div class=figure>
   <p align="center"><img src="https://www.dropbox.com/s/ovxcb46pvk5bup2/toy_emnlp_findings2021.png?raw=1"
     width="450" height=auto></p>
-  <p align="center"><small><i>a) Part of an example KG. b) The contexts c<sub>1</sub> and c<sub>2</sub> from which we have extracted the KG triples. c) An example EG. The contextual link prediction and EG learning tasks are complementary. For example, acquire → own from the EG can independently be used to add the missing own relation to the KG.</i></small></p>
+  <p align="center"><small><i>a) Part of an example KG. b) The contexts from which we have extracted the KG triples. c) An example EG. The contextual link prediction and EG learning tasks are complementary. For example, acquire → own from the EG can independently be used to add the missing own relation to the KG.</i></small></p>
 </div>
 
 This codebase contains the implementation of the following paper:
