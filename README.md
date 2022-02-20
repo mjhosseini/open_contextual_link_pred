@@ -78,30 +78,21 @@ The entailment graphs will be written in "entgraphs_CNCE_MC_random_split".
 
 The entailment graphs will be written in "entgraphs_AUG_CNCE_MC_random_split".
 
-** Learning global entailment graphs **
+### Learning global entailment graphs
 Please refer to https://github.com/mjhosseini/entGraph/ (step 6) for learning global entailment graphs from local entailment graphs (the ones that were learned above).
 
-**We set the below parameters for the "CNCE MC" and "CNCE AUG MC" models:**
+*We set the below parameters for the "CNCE MC" and "CNCE AUG MC" models:*
 
 *constants.ConstantsGraphs*:
 
-* root=".../typedEntGrDir_NS_all_MC" (or ".../typedEntGrDir_NS_train_MC")
+* root=".../entgraphs_CNCE_MC_random_split" (or ".../entgraphs_CNCE_AUG_MC_random_split")
 * edgeThreshold=0.00005
 
 *constants.ConstantsSoftConst*:
 
 * lmbda=0.00005, lmbda_2=1.5, epsilon=.3, and tPropSuffix="_lpred_CNCE_MC_lmbda_0.00005_lmbda2_1.5_eps_.3" (or "_lpred_CNCE_AUG_MC_lmbda_0.00005_lmbda2_1.5_eps_.3").
 
-**We set the below parameters for the AUG MC models:**
-
-*constants.ConstantsGraphs*:
-
-* root=".../typedEntGrDir_NS_all_AUG_MC" (or ".../typedEntGrDir_NS_train_AUG_MC")
-* edgeThreshold=.0002
-
-*constants.ConstantsSoftConst*:
-
-* lmbda=.0002, lmbda_2=1, epsilon=0.3, and tPropSuffix="_lpred_conve_AUG_MC_lmbda_.0002_lmbda2_1_eps_.3".
+### Evaluation on entailment datasets
 
 See https://github.com/mjhosseini/entgraph_eval for the steps to evaluate the entailment graphs on the Levy/Holt's dataset.
 
