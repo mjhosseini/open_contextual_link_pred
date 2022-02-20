@@ -4,25 +4,25 @@ This codebase contains the implementation of the following paper:
 
 **Open-Domain Contextual Link Prediction and its Complementarity with Entailment Graphs**, *Mohammad Javad Hosseini, Shay B. Cohen, Mark Johnson, and Mark Steedman. Findings of the Association for Computational Linguistics: EMNLP 2021.* [[paper]](https://aclanthology.org/2021.findings-emnlp.238.pdf)
 
-## Setup
+# Setup
 
-### Cloning the project and installing the requirements
+## Cloning the project and installing the requirements
 
     git clone https://github.com/mjhosseini/open_contextual_link_pred.git
     cd open_contextual_link_pred/
     sh scripts/requirements.sh
 
-### Preparing the data
+## Preparing the data
 
 Download the extracted triple mentions and other necessary data into the folder "data/":
     
     sh scripts/data.sh
 
-## Running the code
+# Running the code
 
-### Contextual link prediction
+## Contextual link prediction
 
-#### Training
+### Training
 
 Training the CNCE (Contextualized and Non-Contextualized Embeddings) model on the NewsSpike corpus for the contextual link prediction task:
 
@@ -37,7 +37,7 @@ You can also download the pre-trained contextual link prediction models and use 
     sh scripts/dl_pretrained.sh
 
 All the mentioned models in this GitHub page could be found in the folder 'pretrained_models'.
-#### Evaluation
+### Evaluation
 
 Evaluating the CNCE model on the contextual link prediction task:
 
@@ -45,9 +45,9 @@ Evaluating the CNCE model on the contextual link prediction task:
 
 The results will be written in the following file: test_final_CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split.txt
 
-### Using contextual link prediction to improve entailment graph learning
+## Using contextual link prediction to improve entailment graph learning
 
-#### Training
+## Training
 
 Since the entailment graphs will be evaluated on a different dataset (e.g., Levy/Holt's dataset), we do not need the constraints on the entity pairs seen during training vs the ones during testing. We perform the training again without the --all_triples_path flag. In this case, the code splits the triple mentions randomly into training, development and test sets (with overlap between the entities). We observed that random split will yield slightly better results on entailment datasets because the training sees more diverse examples (almost all entity pairs occur in training).    
 
@@ -55,7 +55,7 @@ Since the entailment graphs will be evaluated on a different dataset (e.g., Levy
     
 You can also use the following model from the pre-trained folder: pretrained_models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split
 
-#### Building entailment graphs
+### Building entailment graphs
 
     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_random_split/checkpoint-631000 --do_build_entgraphs --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels --max_seq_length 40 --entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_random_split
 
@@ -63,9 +63,9 @@ The entailment graphs will be written in a directory, e.g., entgraphs_AUG_CNCE_M
 
 See https://github.com/mjhosseini/entgraph_eval for the steps to evaluate the entailment graphs on the Levy/Holt's dataset.
 
-### Using Entailment Graphs to Improve the Contextual link prediction task.
+## Using Entailment Graphs to Improve the Contextual link prediction task.
 
-#### Building entailment graphs
+### Building entailment graphs
 
 We build the entailment graphs again.
 
@@ -77,16 +77,16 @@ A. using entity-pairs splits as we are going to use the entailment graphs for th
 
 B. We only use the training portion of the triple mentions by using the flag --use_only_training_data_to_build_entgraphs.
 
-#### Evaluating entailment graphs on the contextual link prediction task
+### Evaluating entailment graphs on the contextual link prediction task
 
     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000 --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels/ --all_triples_path data/NS_epair_split/ --prebuilt_entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
 
-#### Evaluating the combination of entailment graphs and the CNCE model on the contextual link prediction task
+### Evaluating the combination of entailment graphs and the CNCE model on the contextual link prediction task
     
     python modeling/run_contextual_link_pred.py --model_type bert --model_name_or_path models/CNCE_lr_5e-4_ctx_lr_ratio_1e-2_bsz_64_entity_pair_split/checkpoint-631000  --do_test --do_lower_case --input_path data/news_bert_input.json --trels_folder data/typed_rels/ --all_triples_path data/NS_epair_split/ --do_eval_ext comb_beta_.9 --beta_comb .9 --prebuilt_entgraph_dir entgraphs_AUG_CNCE_MC_fill_100_bsz512_alpha_.5_entity_pair_split_only_train --combine_entgraph_emb --max_seq_length 40 --per_gpu_batch_size=256 --cache_dir . --preferred_num_labels 100000 --evaluate_during_training
 
 
-## Citation
+# Citation
 
 If you found this codebase useful, please cite:
 
