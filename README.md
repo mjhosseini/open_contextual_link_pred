@@ -22,7 +22,9 @@ Download the extracted triple mentions and other necessary data into the folder 
     
     sh scripts/data.sh
 
-1) You could instead extract the triple mentions from the NewsSpike corpus: Run steps 1-4 of the entGraph project to parse the corpus and get necessary tokenizations. The only necessary change is to set  
+You could instead extract the triple mentions from the NewsSpike corpus:
+
+1) Run steps 1-4 of the entGraph project to parse the corpus using a CCG parser and get necessary tokenizations. The only necessary change is to set
 constants.ConstantsParsing.writeTokenizationInfo=true
 
 Address of the entGraph project: https://github.com/mjhosseini/entGraph/
