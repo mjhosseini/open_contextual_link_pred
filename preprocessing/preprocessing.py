@@ -574,6 +574,6 @@ parser.add_argument(
 
 args = parser.parse_args()
 # create_entgraph_bert_input("../../gfiles/typed_rels_aida_figer_3_3_f_copy/", "../../../java/entgraph/news_gen14.json", "../../../java/entgraph/news_roberta_large_input14_all.json", 100000, True, "roberta", "roberta-large")
-create_entgraph_bert_input("../contextual_data/typed_rels/", "../contextual_data/news_gen.json", "../contextual_data/news_bert_input2.json", 5000, True, "bert", "bert-base-uncased")
+# create_entgraph_bert_input("../contextual_data/typed_rels/", "../contextual_data/news_gen.json", "../contextual_data/news_bert_input2.json", 5000, True, "bert", "bert-base-uncased")
 create_entgraph_bert_input(args.rels_folder, args.input_path, args.output_path, args.window_size, True, args.model_type,
                            args.model_name_or_path)
