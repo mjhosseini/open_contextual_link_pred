@@ -22,6 +22,16 @@ Download the extracted triple mentions and other necessary data into the folder 
     
     sh scripts/data.sh
 
+1) You could instead extract the triple mentions from the NewsSpike corpus: Run steps 1-4 of the entGraph project to parse the corpus and get necessary tokenizations. The only necessary change is to set  
+constants.ConstantsParsing.writeTokenizationInfo=true
+
+Address of the entGraph project: https://github.com/mjhosseini/entGraph/
+
+2) Extract the triple mentions by running:
+
+    python preprocessing/preprocessing.py --rels_folder data/typed_rels/ --input_path data/news_gen.json --output_path data/news_bert_input.json --window_size 5000 --model_type bert --model_name_or_path bert-base-uncased
+
+
 # Contextual link prediction
 
 ## Training
