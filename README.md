@@ -9,7 +9,7 @@ This codebase contains the implementation of the following paper:
 **Open-Domain Contextual Link Prediction and its Complementarity with Entailment Graphs**, *Mohammad Javad Hosseini, Shay B. Cohen, Mark Johnson, and Mark Steedman. Findings of the Association for Computational Linguistics: EMNLP 2021.* [[paper]](https://aclanthology.org/2021.findings-emnlp.238.pdf)
 
 # Final Entailment Graphs
-The learned entailment graphs can be downloaded from [[here]](https://drive.google.com/file/d/1XC_nAwrQ17ahIr_WIce4V1StINjcnYLe/view?usp=sharing).
+The learned entailment graphs can be downloaded from [[here]](https://drive.google.com/file/d/1XC_nAwrQ17ahIr_WIce4V1StINjcnYLe/view?usp=sharing). However, the entailment graphs are not required to run the below code.
 
 # Setup
 
